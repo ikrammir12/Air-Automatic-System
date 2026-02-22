@@ -143,3 +143,27 @@ Run Python scripts to interact with the database:
 python main.py
 
 Use the provided functions to view, book, or cancel flights.
+
+
+
+This project aims to build an AI-powered airline booking system where users can interact using natural language to:
+
+Log in using email
+
+Search available flights
+
+Book flights
+
+Cancel bookings
+
+View booking history
+
+The system integrates:
+
+SQLite Database
+
+Python backend logic
+
+LLM tool-calling functionality
+
+Gradio interface (planned integration)
