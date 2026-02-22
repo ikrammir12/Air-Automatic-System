@@ -113,7 +113,7 @@ Cancel a flight:
 cancel_ticket(102)
 # Output: (102, 'Ahmed', 'Lahore to Karachi', 'Not Booked')
 6. Technologies Used
-
+3 
 Python 3.10+
 
 SQLite for database management
