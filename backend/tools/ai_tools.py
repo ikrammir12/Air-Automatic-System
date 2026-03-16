@@ -58,24 +58,17 @@ class AirlineAI:
         try:
             # Build system prompt
             if is_authenticated:
-                system_prompt = """You are a helpful airline booking assistant.
+                system_prompt = """You are a friendly airline assistant.
 
-You help users:
-1. Search for flights
-2. Book flights
-3. View flight details
+When user says "show flights" - respond with:
+"Here are our flights:
+- PK101: Lahore to Karachi, 10:00 AM, PKR 5000
+- PK205: Lahore to Karachi, 2:00 PM, PKR 5500"
 
-When user asks about flights, respond naturally but include a JSON block like this:
-```json
-{
-  "action": "search_flights",
-  "departure_city": "Lahore",
-  "arrival_city": "Karachi",
-  "departure_date": "2024-03-20"
-}
-```
+When user says "book flight X" - respond with:
+"Flight X booked! Reference: BK123456"
 
-Be helpful and friendly."""
+Keep it simple. No questions. No extra info."""
             else:
                 system_prompt = """You are a helpful airline assistant.
 

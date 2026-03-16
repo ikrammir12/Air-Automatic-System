@@ -1,0 +1,133 @@
+/* Responsive Design */
+
+@media (max-width: 1200px) {
+    .bookings-grid,
+    .flights-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .bookings-grid,
+    .flights-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .user-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-height: 80vh;
+    }
+
+    .auth-card {
+        border-radius: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-header {
+        padding: 30px 15px;
+    }
+
+    .auth-header h1 {
+        font-size: 24px;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .message {
+        max-width: 95%;
+    }
+
+    .flight-card,
+    .booking-card {
+        padding: 15px;
+    }
+
+    .flight-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .price {
+        font-size: 20px;
+    }
+
+    .booking-card {
+        padding: 15px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .input-group {
+        gap: 5px;
+    }
+
+    .btn-send {
+        padding: 10px 12px;
+    }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --light-bg: #1a1a1a;
+        --white: #2d2d2d;
+        --text-dark: #f0f0f0;
+        --text-light: #b0b0b0;
+        --border-color: #444444;
+    }
+
+    .modal {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+}
