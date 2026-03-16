@@ -11,6 +11,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 import os
 
+
 # Import database and routes
 from database import init_db
 from routes import auth, flights, bookings, ai

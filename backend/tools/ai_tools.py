@@ -14,13 +14,15 @@ from dotenv import load_dotenv
 load_dotenv()
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
+# Configure Gemini API
 try:
-    genai.configure(api_key='GEMINI_API_KEY')
+    genai.configure(api_key=GEMINI_API_KEY)  # ✅ No quotes!
+    print("✅ Gemini API configured successfully")
 except Exception as e:
     print(f"❌ Gemini API Error: {e}")
 
 # Model name
-MODEL_NAME = "gemini-1.5-flash"
+MODEL_NAME = "gemini-2.5-flash"
 
 class AirlineAI:
     """AI Assistant for Airline Booking System"""
@@ -93,14 +95,17 @@ Tell users they must login to book flights.
 Be helpful and friendly."""
             
             # Build conversation
+            # Start with system prompt as first user message
             messages = [
                 {"role": "user", "parts": [{"text": system_prompt}]},
             ]
             
             # Add conversation history
+            # ✅ FIX: Convert "assistant" to "model" for Google API
             for msg in self.conversation_history[user_id][-10:]:  # Last 10 messages
+                role = "model" if msg["role"] == "assistant" else msg["role"]
                 messages.append({
-                    "role": msg["role"],
+                    "role": role,
                     "parts": [{"text": msg["content"]}]
                 })
             
@@ -174,6 +179,7 @@ Be helpful and friendly."""
                 pass
             
             # Add to history
+            # ✅ Store as "assistant" in history (will convert to "model" when needed)
             self.conversation_history[user_id].append({
                 "role": "user",
                 "content": user_message
