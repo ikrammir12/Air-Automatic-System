@@ -1,183 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airline Booking System - AI Powered</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirBook — Airline Booking</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <div id="app">
-        <!-- Authentication Section -->
-        <div id="auth-section" class="auth-container">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <h1>✈️ Airline Booking System</h1>
-                    <p>AI-Powered Flight Reservations</p>
-                </div>
-                
-                <!-- Login Form -->
-                <div id="login-form" class="form-container active">
-                    <h2>Login</h2>
-                    <form onsubmit="handleLogin(event)">
-                        <div class="form-group">
-                            <label for="login-email">Email:</label>
-                            <input type="email" id="login-email" required placeholder="your@email.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password">Password:</label>
-                            <input type="password" id="login-password" required placeholder="••••••••">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                        <p class="form-switch">
-                            Don't have an account? 
-                            <a href="#" onclick="switchForm('register')">Register here</a>
-                        </p>
-                    </form>
-                    <div id="login-error" class="error-message" style="display: none;"></div>
-                </div>
-                
-                <!-- Register Form -->
-                <div id="register-form" class="form-container">
-                    <h2>Create Account</h2>
-                    <form onsubmit="handleRegister(event)">
-                        <div class="form-group">
-                            <label for="register-name">Full Name:</label>
-                            <input type="text" id="register-name" required placeholder="Your full name">
-                        </div>
-                        <div class="form-group">
-                            <label for="register-email">Email:</label>
-                            <input type="email" id="register-email" required placeholder="your@email.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="register-phone">Phone (optional):</label>
-                            <input type="tel" id="register-phone" placeholder="+92 300 1234567">
-                        </div>
-                        <div class="form-group">
-                            <label for="register-password">Password:</label>
-                            <input type="password" id="register-password" required placeholder="••••••••">
-                        </div>
-                        <div class="form-group">
-                            <label for="register-confirm">Confirm Password:</label>
-                            <input type="password" id="register-confirm" required placeholder="••••••••">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Create Account</button>
-                        <p class="form-switch">
-                            Already have an account? 
-                            <a href="#" onclick="switchForm('login')">Login here</a>
-                        </p>
-                    </form>
-                    <div id="register-error" class="error-message" style="display: none;"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Main App Section -->
-        <div id="main-app" class="main-container" style="display: none;">
-            <!-- Header -->
-            <header class="header">
-                <div class="header-content">
-                    <h1>✈️ Airline Booking System</h1>
-                    <div class="user-info">
-                        <span id="user-name"></span>
-                        <button class="btn btn-secondary" onclick="handleLogout()">Logout</button>
-                    </div>
-                </div>
-            </header>
-            
-            <!-- Main Content -->
-            <div class="content-wrapper">
-                <!-- Sidebar with AI Assistant -->
-                <aside class="sidebar">
-                    <div class="sidebar-header">
-                        <h2>🤖 AI Assistant</h2>
-                    </div>
-                    
-                    <div class="chat-container">
-                        <div id="chat-messages" class="chat-messages">
-                            <div class="message assistant-message">
-                                <p>Hello! I can help you search and book flights. Where would you like to go?</p>
-                            </div>
-                        </div>
-                        
-                        <form class="chat-form" onsubmit="sendMessage(event)">
-                            <div class="input-group">
-                                <input 
-                                    type="text" 
-                                    id="chat-input" 
-                                    placeholder="Ask about flights (e.g., Lahore to Karachi)"
-                                    autocomplete="off"
-                                >
-                                <button type="submit" class="btn-send">➤</button>
-                            </div>
-                        </form>
-                    </div>
-                </aside>
-                
-                <!-- Main Content Area -->
-                <main class="main-content">
-                    <!-- Dashboard Section -->
-                    <section id="dashboard-section" class="section active">
-                        <div class="section-header">
-                            <h2>My Bookings</h2>
-                            <button class="btn btn-primary" onclick="refreshBookings()">Refresh</button>
-                        </div>
-                        
-                        <div id="bookings-container" class="bookings-grid">
-                            <div class="loading">Loading your bookings...</div>
-                        </div>
-                    </section>
-                    
-                    <!-- Flight Search Results Section -->
-                    <section id="search-results-section" class="section" style="display: none;">
-                        <div class="section-header">
-                            <h2>Available Flights</h2>
-                            <button class="btn btn-secondary" onclick="closeSearchResults()">← Back</button>
-                        </div>
-                        
-                        <div id="flights-container" class="flights-grid">
-                            <div class="loading">Searching for flights...</div>
-                        </div>
-                    </section>
-                </main>
-            </div>
-        </div>
+
+<!-- ════════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="logo-icon">✈️</span>
+      <h1>AirBook</h1>
+      <p>Pakistan's Smart Airline Booking</p>
     </div>
-    
-    <!-- Modal for Flight Booking -->
-    <div id="booking-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeBookingModal()">&times;</span>
-            <h2>Confirm Booking</h2>
-            <div id="modal-flight-details"></div>
-            <div class="form-group">
-                <label for="passenger-name">Passenger Name:</label>
-                <input type="text" id="passenger-name" required>
-            </div>
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="return-flight-checkbox">
-                    Book return flight also
-                </label>
-            </div>
-            <div id="return-flight-select" style="display: none;" class="form-group">
-                <label for="return-flight-id">Select Return Flight:</label>
-                <select id="return-flight-id"></select>
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmBooking()">Book Flight</button>
-            </div>
-            <div id="booking-error" class="error-message" style="display: none;"></div>
-        </div>
+
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="tab-login">Sign In</button>
+      <button class="tab-btn" id="tab-register">Register</button>
     </div>
-    
-    <!-- Scripts - CORRECT PATHS -->
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
-    <script src="js/ai-assistant.js"></script>
-    <script src="js/main.js"></script>
+
+    <!-- Login Form -->
+    <form id="login-form">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="you@example.com" value="user1@example.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Enter password" value="password123" required>
+      </div>
+      <button type="submit" class="btn-primary" id="btn-login">Sign In</button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="register-form" style="display:none">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="Ahmed Khan" required>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="reg-email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label>Phone (optional)</label>
+        <input type="text" id="reg-phone" placeholder="03001234567">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Min 6 characters" required>
+      </div>
+      <button type="submit" class="btn-primary" id="btn-register">Create Account</button>
+    </form>
+
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MAIN APP
+════════════════════════════════════════ -->
+<div id="app-screen">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      ✈️ <span>AirBook</span>
+    </div>
+    <div class="topbar-user">
+      <div class="user-info">
+        <div class="user-name" id="topbar-name"></div>
+        <div class="user-email" id="topbar-email"></div>
+      </div>
+      <button class="btn-logout" id="btn-logout">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Split Layout -->
+  <div class="main-layout">
+
+    <!-- LEFT: AI Chat -->
+    <div class="chat-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <div class="status-dot"></div>
+          SkyBot AI Assistant
+        </div>
+        <div class="panel-subtitle">Ask me to find or book flights</div>
+      </div>
+
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <div class="chat-input-area">
+        <div class="quick-prompts">
+          <button class="quick-btn" data-msg="Show flights from Lahore to Karachi">LHE → KHI</button>
+          <button class="quick-btn" data-msg="Show flights from Lahore to Islamabad">LHE → ISB</button>
+          <button class="quick-btn" data-msg="Show flights from Karachi to Islamabad">KHI → ISB</button>
+          <button class="quick-btn" data-msg="Show all available flights">All Flights</button>
+        </div>
+        <div class="input-row">
+          <textarea
+            id="chat-input"
+            rows="1"
+            placeholder="Ask SkyBot... e.g. 'Show flights from Lahore to Karachi'"
+          ></textarea>
+          <button class="btn-send" id="btn-send">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Bookings Dashboard -->
+    <div class="dashboard-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          🎫 My Bookings
+          <span id="booking-count" style="font-size:12px; color:var(--muted); font-weight:400; margin-left:6px"></span>
+        </div>
+        <div class="panel-subtitle">Manage your flight reservations</div>
+      </div>
+
+      <div class="bookings-list" id="bookings-container">
+        <div class="empty-state">
+          <span class="empty-icon">🎫</span>
+          <p>No active bookings yet.<br>Ask SkyBot to book a flight!</p>
+        </div>
+      </div>
+
+      <div class="dashboard-actions">
+        <button class="btn-refresh" id="btn-refresh">↻ Refresh Bookings</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/ai-assistant.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

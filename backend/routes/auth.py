@@ -1,98 +1,39 @@
-"""
-Authentication routes
-Handles user login and registration
-"""
-
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import JSONResponse
-from models import UserLogin, UserRegister, UserResponse
-from database import authenticate_user, register_user, get_user
-import secrets
-import sqlite3
+from fastapi import APIRouter, HTTPException
+from passlib.hash import bcrypt
+from models import UserRegister, UserLogin
+from database import get_db
 
 router = APIRouter()
 
-# Simple session storage (in production, use JWT or similar)
-sessions = {}
-
 @router.post("/register")
-async def register(user_data: UserRegister):
-    """Register a new user"""
-    result = register_user(
-        email=user_data.email,
-        password=user_data.password,
-        full_name=user_data.full_name,
-        phone=user_data.phone or ""
-    )
-    
-    if result["success"]:
-        return {
-            "success": True,
-            "message": result["message"],
-            "user_id": result["user_id"]
-        }
-    else:
-        raise HTTPException(status_code=400, detail=result["message"])
+def register(data: UserRegister):
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT user_id FROM users WHERE email=?", (data.email,))
+    if c.fetchone():
+        conn.close()
+        raise HTTPException(400, "Email already registered")
+    pw_hash = bcrypt.hash(data.password)
+    c.execute("""
+        INSERT INTO users (full_name, email, phone, password_hash)
+        VALUES (?,?,?,?)
+    """, (data.full_name, data.email, data.phone, pw_hash))
+    conn.commit()
+    user_id = c.lastrowid
+    conn.close()
+    return {"message": "Registered successfully", "user_id": user_id, "full_name": data.full_name, "email": data.email}
 
 @router.post("/login")
-async def login(user_data: UserLogin):
-    """Authenticate user login"""
-    result = authenticate_user(email=user_data.email, password=user_data.password)
-    
-    if result["success"]:
-        # Generate session token
-        token = secrets.token_urlsafe(32)
-        sessions[token] = {
-            "user_id": result["user_id"],
-            "email": result["email"],
-            "full_name": result["full_name"]
-        }
-        
-        return {
-            "success": True,
-            "message": "Login successful",
-            "user_id": result["user_id"],
-            "full_name": result["full_name"],
-            "email": result["email"],
-            "token": token
-        }
-    else:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-@router.get("/me")
-async def get_current_user(token: str = None):
-    """Get current user information"""
-    if not token or token not in sessions:
-        raise HTTPException(status_code=401, detail="Unauthorized")
-    
-    session = sessions[token]
-    user = get_user(session["user_id"])
-    
-    if user:
-        return {
-            "success": True,
-            "user": user
-        }
-    else:
-        raise HTTPException(status_code=404, detail="User not found")
-
-@router.post("/logout")
-async def logout(token: str = None):
-    """Logout user"""
-    if token and token in sessions:
-        del sessions[token]
-    
+def login(data: UserLogin):
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE email=?", (data.email,))
+    user = c.fetchone()
+    conn.close()
+    if not user or not bcrypt.verify(data.password, user["password_hash"]):
+        raise HTTPException(401, "Invalid email or password")
     return {
-        "success": True,
-        "message": "Logged out successfully"
-    }
-
-@router.post("/check-email")
-async def check_email(email: str):
-    """Check if email already exists"""
-    from database import user_exists
-    exists = user_exists(email)
-    return {
-        "exists": exists,
-        "email": email
+        "user_id": user["user_id"],
+        "full_name": user["full_name"],
+        "email": user["email"]
     }
